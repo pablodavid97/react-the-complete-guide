@@ -1,58 +1,72 @@
-import reactImg from './assets/react-core-concepts.png';
+import { useState } from 'react';
+import { Header } from './components/Header/Header';
+import { CoreConcept } from './components/CoreConcept';
+import { TabButton } from './components/TabButton';
 import componentsImg from './assets/components.png';
 import { CORE_CONCEPTS } from './data';
-
-const reactDescriptions = ['Fundamental', 'Crucial', 'Core'];
-
-function genRandomInt(max) {
-    return Math.floor(Math.random() * (max + 1));
-}
-
-function Header() {
-    const description = reactDescriptions[genRandomInt(2)];
-    return (
-        <header>
-            <img src={reactImg} alt='Stylized atom' />
-            <h1>React Essentials</h1>
-            <p>
-                {description} React concepts you will need for almost any app
-                you are going to build!
-            </p>
-        </header>
-    );
-}
-
-function CoreConcept({ title, description, image}) {
-  return <li>
-    <img src={image} alt={title} />
-    <h3>{title}</h3>
-    <p>{description}</p>
-  </li>
-};
+import { EXAMPLES } from './data';
 
 function App() {
+    const [tabContent, setTabContent] = useState();
+
+    function handleSelect(selectedButton) {
+        setTabContent(selectedButton);
+        console.log('tab content: ', tabContent);
+    }
     return (
         <div>
             <Header />
             <main>
-                <section id="core-concepts">
-                  <h2>Core Concepts</h2>
-                  <ul>
-                    <CoreConcept
-                      title="Components"
-                      description="The core UI building block."
-                      image={componentsImg}
-                     />
-                    <CoreConcept 
-                      {...CORE_CONCEPTS[1]}
-                    />
-                    <CoreConcept 
-                      {...CORE_CONCEPTS[2]}
-                    />
-                    <CoreConcept 
-                      {...CORE_CONCEPTS[3]}
-                    />
-                  </ul>
+                <section id='core-concepts'>
+                    <h2>Core Concepts</h2>
+                    <ul>
+                        {CORE_CONCEPTS.map((concept, index) => (
+                            <CoreConcept
+                                key={`concept-${index}`}
+                                {...concept}
+                            />
+                        ))}
+                    </ul>
+                </section>
+                <section id='examples'>
+                    <h2>Examples</h2>
+                    <menu>
+                        <TabButton
+                            onSelect={() => handleSelect('components')}
+                            isSelected={tabContent === 'components'}
+                        >
+                            Components
+                        </TabButton>
+                        <TabButton
+                            onSelect={() => handleSelect('jsx')}
+                            isSelected={tabContent === 'jsx'}
+                        >
+                            JSX
+                        </TabButton>
+                        <TabButton
+                            onSelect={() => handleSelect('props')}
+                            isSelected={tabContent === 'props'}
+                        >
+                            Props
+                        </TabButton>
+                        <TabButton
+                            onSelect={() => handleSelect('state')}
+                            isSelected={tabContent === 'state'}
+                        >
+                            State
+                        </TabButton>
+                    </menu>
+                    {tabContent ? (
+                        <div id='tab-content'>
+                            <h3>{EXAMPLES[tabContent].title}</h3>
+                            <p>{EXAMPLES[tabContent].description}</p>
+                            <pre>
+                                <code>{EXAMPLES[tabContent].code}</code>
+                            </pre>
+                        </div>
+                    ) : (
+                        <p>Please select a topic.</p>
+                    )}
                 </section>
             </main>
         </div>
