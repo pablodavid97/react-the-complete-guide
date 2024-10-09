@@ -1,3 +1,5 @@
+import { formatter } from '../util/investment';
+
 const ResultsTable = ({ results, initialInvestment }) => {
     let investedCapital = initialInvestment;
     let totalInterest = 0;
@@ -20,12 +22,12 @@ const ResultsTable = ({ results, initialInvestment }) => {
                     investedCapital += annualInvestment;
                     totalInterest += interest;
                     return (
-                        <tr>
+                        <tr key={`result-year-${year}`}>
                             <td>{year}</td>
-                            <td>{valueEndOfYear}</td>
-                            <td>{interest}</td>
-                            <td>{totalInterest}</td>
-                            <td>{investedCapital}</td>
+                            <td>{formatter.format(valueEndOfYear)}</td>
+                            <td>{formatter.format(interest)}</td>
+                            <td>{formatter.format(totalInterest)}</td>
+                            <td>{formatter.format(investedCapital)}</td>
                         </tr>
                     );
                 })}

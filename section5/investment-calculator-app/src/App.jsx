@@ -2,47 +2,33 @@ import { useState } from 'react';
 import Header from './components/Header';
 import InputGroup from './components/InputGroup';
 import ResultsTable from './components/ResultsTable';
+import {
+    deriveInvestmentResults,
+    deriveHasInputValueChanged,
+} from './util/investment';
 
-import { calculateInvestmentResults } from './util/investment';
-
-const deriveInvestmentResults = (userInput) => {
-    const inputValues = userInput.map(
-        ({ text, ...rest }) => Object.values(rest)[0]
-    );
-
-    const investmentValues = {
-        initialInvestment: inputValues[0],
-        annualInvestment: inputValues[1],
-        expectedReturn: inputValues[2],
-        duration: inputValues[3],
-    };
-
-    return calculateInvestmentResults(investmentValues);
-};
+const DEFAULT_USER_INPUT = [
+    {
+        text: 'Initial Investment',
+        initialInvestment: 0,
+    },
+    {
+        text: 'Annual Investment',
+        annualInvestment: 0,
+    },
+    {
+        text: 'Expected Return',
+        expectedReturn: 0,
+    },
+    {
+        text: 'Duration',
+        duration: 0,
+    },
+];
 
 function App() {
-    const [userInput, setUserInput] = useState([
-        {
-            text: 'Initial Investment',
-            initialInvestment: 0,
-        },
-        {
-            text: 'Annual Investment',
-            annualInvestment: 0,
-        },
-        {
-            text: 'Expected Return',
-            expectedReturn: 0,
-        },
-        {
-            text: 'Duration',
-            duration: 0,
-        },
-    ]);
-
+    const [userInput, setUserInput] = useState(DEFAULT_USER_INPUT);
     const results = deriveInvestmentResults(userInput);
-
-    console.log('results: ', results);
 
     const handleUserInputChange = (key, value) => {
         setUserInput((prev) => {
@@ -57,12 +43,15 @@ function App() {
             return newUserInput;
         });
     };
+    const hasInputValueBeenChanged = deriveHasInputValueChanged(userInput);
+
     return (
         <>
             <Header />
             <InputGroup
                 userInput={userInput}
                 onInputChange={handleUserInputChange}
+                hasInputValueBeenChanged={hasInputValueBeenChanged}
             />
             <ResultsTable
                 results={results}
