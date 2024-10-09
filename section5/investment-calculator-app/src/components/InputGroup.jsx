@@ -1,11 +1,19 @@
-const InputGroup = () => {
+import UserInput from './UserInput';
+
+const InputGroup = ({ userInput, onInputChange }) => {
     return (
-        <div id='user-input' className='input-group'>
-            <div class='flex-item'>1</div>
-            <div class='flex-item'>2</div>
-            <div class='flex-item'>3</div>
-            <div class='flex-item'>4</div>
-            <div class='flex-item'>5</div>
+        <div id='inputGroup' className='input-group'>
+            {userInput.map((input) => {
+                const key = Object.keys(input)[1];
+                console.log('key: ', key);
+                return (
+                    <UserInput
+                        key={`user-input-${key}`}
+                        input={input}
+                        onInputChange={onInputChange}
+                    />
+                );
+            })}
         </div>
     );
 };
