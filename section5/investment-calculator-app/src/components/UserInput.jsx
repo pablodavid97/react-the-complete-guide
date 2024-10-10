@@ -1,9 +1,9 @@
-const UserInput = ({ input, onInputChange, errorMsg }) => {
+const UserInput = ({ input, onChange }) => {
     const [[, text], [inputKey, inputValue]] = Object.entries(input);
 
     const handleInputChange = (event) => {
         const { value: newValue } = event.target;
-        onInputChange(inputKey, parseInt(newValue));
+        onChange(inputKey, newValue);
     };
 
     const handleFocus = (event) => {
@@ -23,8 +23,8 @@ const UserInput = ({ input, onInputChange, errorMsg }) => {
                 onFocus={handleFocus}
                 onBlur={handleBlur}
                 type='number'
+                required
             />
-            {errorMsg && <p className='error'>{errorMsg}</p>}
         </div>
     );
 };

@@ -51,16 +51,3 @@ export const deriveInvestmentResults = (userInput) => {
 
     return calculateInvestmentResults(investmentValues);
 };
-
-export const deriveHasInputValueChanged = (userInput) => {
-    let hasInputValueBeenChanged = false;
-
-    userInput.forEach(({ text, ...rest }) => {
-        const value = Object.values(rest)[0];
-        if (value !== 0) {
-            hasInputValueBeenChanged = true;
-        }
-    });
-
-    return hasInputValueBeenChanged;
-};

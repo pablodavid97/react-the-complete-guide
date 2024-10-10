@@ -1,6 +1,8 @@
-import { formatter } from '../util/investment';
+import { formatter, deriveInvestmentResults } from '../util/investment';
 
-const ResultsTable = ({ results, initialInvestment }) => {
+const ResultsTable = ({ userInput }) => {
+    const initialInvestment = userInput[0].initialInvestment;
+    const results = deriveInvestmentResults(userInput);
     let investedCapital = initialInvestment;
     let totalInterest = 0;
     return (

@@ -1,29 +1,22 @@
 import UserInput from './UserInput';
 
-const InputGroup = ({ userInput, onInputChange, hasInputValueBeenChanged }) => {
+const InputGroup = ({ userInput, onChange }) => {
     return (
-        <div id='inputGroup' className='input-group'>
-            {userInput.map((input) => {
-                const key = Object.keys(input)[1];
-                let errorMsg;
+        <section id='inputGroup'>
+            <div className='input-group'>
+                {userInput.map((input) => {
+                    const key = Object.keys(input)[1];
 
-                if (hasInputValueBeenChanged) {
-                    if (key === 'duration' && input.duration < 1) {
-                        errorMsg =
-                            'Invalid duration. A value greater or equal than 1 must be entered.app';
-                    }
-                }
-
-                return (
-                    <UserInput
-                        key={`user-input-${key}`}
-                        input={input}
-                        onInputChange={onInputChange}
-                        errorMsg={errorMsg}
-                    />
-                );
-            })}
-        </div>
+                    return (
+                        <UserInput
+                            key={`user-input-${key}`}
+                            input={input}
+                            onChange={onChange}
+                        />
+                    );
+                })}
+            </div>
+        </section>
     );
 };
 

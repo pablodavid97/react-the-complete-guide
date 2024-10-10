@@ -2,10 +2,6 @@ import { useState } from 'react';
 import Header from './components/Header';
 import InputGroup from './components/InputGroup';
 import ResultsTable from './components/ResultsTable';
-import {
-    deriveInvestmentResults,
-    deriveHasInputValueChanged,
-} from './util/investment';
 
 const DEFAULT_USER_INPUT = [
     {
@@ -28,35 +24,42 @@ const DEFAULT_USER_INPUT = [
 
 function App() {
     const [userInput, setUserInput] = useState(DEFAULT_USER_INPUT);
-    const results = deriveInvestmentResults(userInput);
-
-    const handleUserInputChange = (key, value) => {
+    const handleUserInputChange = (inputIdentifier, value) => {
         setUserInput((prev) => {
             const newUserInput = [...prev];
 
             newUserInput.forEach((input) => {
-                if (key in input) {
-                    input[key] = value;
+                if (inputIdentifier in input) {
+                    // plus sign casts value to an number
+                    input[inputIdentifier] = +value;
                 }
             });
 
             return newUserInput;
         });
     };
-    const hasInputValueBeenChanged = deriveHasInputValueChanged(userInput);
+
+    let isInputValid = true;
+    userInput.forEach((input) => {
+        if (input.duration < 1) {
+            isInputValid = false;
+        }
+    });
 
     return (
         <>
             <Header />
             <InputGroup
                 userInput={userInput}
-                onInputChange={handleUserInputChange}
-                hasInputValueBeenChanged={hasInputValueBeenChanged}
+                onChange={handleUserInputChange}
             />
-            <ResultsTable
-                results={results}
-                initialInvestment={userInput[0].initialInvestment}
-            />
+            {isInputValid ? (
+                <ResultsTable userInput={userInput} />
+            ) : (
+                <p className='center'>
+                    Please enter a duration greater than zero.
+                </p>
+            )}
         </>
     );
 }
