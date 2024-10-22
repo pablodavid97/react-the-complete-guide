@@ -5,6 +5,9 @@ import EmptyHeader from './components/EmptyHeader';
 
 function App() {
     const [mode, setMode] = useState(null);
+    const [projects, setProjects] = useState([]);
+
+    console.log('projects: ', projects);
 
     const handleCreateProject = () => {
         setMode('create');
@@ -13,13 +16,22 @@ function App() {
     const handleCancelProject = () => {
         setMode(null);
     };
+
+    const handleSaveProject = (project) => {
+        setProjects((prevProjects) => [project, ...prevProjects]);
+        setMode(null);
+    };
+
     return (
         <div className='app-container'>
-            <Sidebar onCreate={handleCreateProject} />
+            <Sidebar onCreate={handleCreateProject} projects={projects} />
             <main className='main-content'>
                 {!mode && <EmptyHeader onCreate={handleCreateProject} />}
                 {mode === 'create' && (
-                    <ProjectForm onCancel={handleCancelProject} />
+                    <ProjectForm
+                        onCancel={handleCancelProject}
+                        onSave={handleSaveProject}
+                    />
                 )}
             </main>
         </div>

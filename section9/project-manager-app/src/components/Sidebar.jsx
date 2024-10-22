@@ -1,6 +1,7 @@
 import styles from './Sidebar.module.css';
 
-const Sidebar = ({ onCreate }) => {
+const Sidebar = ({ onCreate, projects }) => {
+    console.log('Sidebar re-rendered with projects: ', projects);
     return (
         <aside className={styles.sidebar}>
             <h3>Your Projects</h3>
@@ -8,9 +9,9 @@ const Sidebar = ({ onCreate }) => {
                 <span>+</span>Add Project
             </button>
             <ul>
-                <li>Project 1</li>
-                <li>Project 2</li>
-                <li>Project 3</li>
+                {projects.map((project, index) => (
+                    <li key={index}>{project.title}</li>
+                ))}
             </ul>
         </aside>
     );

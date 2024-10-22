@@ -1,0 +1,36 @@
+.project-form {
+    display: flex;
+    flex-direction: column;
+    width: 500px;
+}
+
+.form-buttons {
+    margin-left: auto;
+    margin-bottom: 1rem;
+}
+
+.form-buttons button {
+    margin-left: 10px;
+    padding: 0.6rem 1.5rem;
+    cursor: pointer;
+    border: none;
+}
+
+.form-buttons .btn-primary {
+    background-color: #333;
+    color: #fff;
+    border-radius: 5px;
+}
+
+.form-buttons .btn-primary:hover {
+    background-color: #555;
+}
+
+.form-buttons .btn-secondary {
+    background-color: #fff;
+    border-radius: 5px;
+}
+
+.form-buttons .btn-secondary:hover {
+    background-color: #e8e8e8
+}
