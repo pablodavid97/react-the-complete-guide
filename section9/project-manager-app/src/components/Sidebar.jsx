@@ -1,10 +1,10 @@
-import './Sidebar.css';
+import styles from './Sidebar.module.css';
 
-const Sidebar = () => {
+const Sidebar = ({ onCreate }) => {
     return (
-        <aside className='sidebar'>
+        <aside className={styles.sidebar}>
             <h3>Your Projects</h3>
-            <button>
+            <button onClick={onCreate}>
                 <span>+</span>Add Project
             </button>
             <ul>

@@ -16,6 +16,6 @@
     background-color: #555;
 }
 
-.empty-header #noProjectLogo {
+.empty-header img {
     max-width: 100px;
 }

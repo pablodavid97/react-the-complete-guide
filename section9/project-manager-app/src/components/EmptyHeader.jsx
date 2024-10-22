@@ -1,17 +1,13 @@
 import imgPad from '../assets/no-projects.png';
-import './EmptyHeader.css';
+import styles from './EmptyHeader.module.css';
 
-const EmptyHeader = () => {
+const EmptyHeader = ({ onCreate }) => {
     return (
-        <div className='empty-header'>
-            <img
-                id='noProjectLogo'
-                src={imgPad}
-                alt='Physical pad with a pen and paper'
-            />
+        <div className={styles['empty-header']}>
+            <img src={imgPad} alt='Physical pad with a pen and paper' />
             <h1>No Project Selected</h1>
             <p>Select a project or get started with a new one</p>
-            <button>Create new project</button>
+            <button onClick={onCreate}>Create new project</button>
         </div>
     );
 };
