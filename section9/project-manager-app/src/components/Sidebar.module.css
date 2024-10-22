@@ -15,7 +15,7 @@
     color: white;
 }
 
-.sidebar button {
+.sidebar .createBtn {
     background-color: #555;
     color: white;
     padding: 10px;
@@ -26,11 +26,11 @@
     border-radius: 5px;
 }
 
-.sidebar button:hover {
+.sidebar .createBtn:hover {
     background-color: #777;
 }
 
-.sidebar button span {
+.sidebar .createBtn span {
     margin-right: 5px;
 }
 
@@ -38,6 +38,19 @@
     list-style-type: none;
 }
 
+.sidebar ul li {
+    border-radius: 5px;
+}
+
 .sidebar ul li:hover {
     background-color: #555;
+}
+
+.sidebar li .project-btn {
+    background: none;
+    color: white;
+    border: none;
+    width: 100%;
+    text-align: left;
+    padding: 0.5rem 1rem;
 }
