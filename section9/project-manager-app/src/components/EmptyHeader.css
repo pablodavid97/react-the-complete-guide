@@ -1,0 +1,21 @@
+.empty-header {
+    text-align: center;
+}
+
+.empty-header button {
+    background-color: #333;
+    color: #bab9b9;
+    padding: 1rem;
+    border-radius: 7px;
+    margin: 2rem;
+    cursor: pointer;
+    font-weight: 500;
+}
+
+.empty-header button:hover {
+    background-color: #555;
+}
+
+.empty-header #noProjectLogo {
+    max-width: 100px;
+}
