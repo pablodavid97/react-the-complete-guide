@@ -9,8 +9,8 @@ const Sidebar = ({ onCreate, projects, onSelectProject }) => {
                 <span>+</span>Add Project
             </button>
             <ul>
-                {projects.map((project, index) => (
-                    <li key={index}>
+                {projects.map((project) => (
+                    <li key={project.id}>
                         <button
                             className={styles['project-btn']}
                             onClick={() => onSelectProject(project)}

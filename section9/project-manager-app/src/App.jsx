@@ -4,10 +4,19 @@ import ProjectForm from './components/ProjectForm';
 import EmptyHeader from './components/EmptyHeader';
 import ProjectDetails from './components/ProjectDetails';
 
+const deriveActiveProject = (projects) => {
+    for (let project of projects) {
+        if (project.isActive) {
+            return project;
+        }
+    }
+    return null;
+};
+
 function App() {
     const [mode, setMode] = useState(null);
     const [projects, setProjects] = useState([]);
-    const [activeProject, setActiveProject] = useState(null);
+    const activeProject = deriveActiveProject(projects);
 
     const handleCreateProject = () => {
         setMode('create');
@@ -22,17 +31,78 @@ function App() {
         setMode(null);
     };
 
-    const handleProjectSelection = (project) => {
+    const handleProjectSelection = (selectedProject) => {
         setMode('edit');
-        setActiveProject(project);
+        setProjects((prevProjects) => {
+            const newProjects = prevProjects.map((project) => {
+                if (project.id === selectedProject.id) {
+                    return {
+                        ...project,
+                        isActive: true,
+                    };
+                }
+
+                return {
+                    ...project,
+                    isActive: false,
+                };
+            });
+            return newProjects;
+        });
     };
 
     const handleProjectDeletion = () => {
         setProjects((prev) =>
             prev.filter((project) => project.title !== activeProject.title)
         );
-        setActiveProject(null);
         setMode(null);
+    };
+
+    const handleAddTask = (task) => {
+        setProjects((prev) => {
+            const newProjects = prev.map((project) => {
+                if (project.id === task.projectId) {
+                    const newTasks = [...project.tasks];
+                    newTasks.push(task);
+
+                    const newProject = {
+                        ...project,
+                        tasks: newTasks,
+                    };
+                    return newProject;
+                }
+
+                return project;
+            });
+            return newProjects;
+        });
+    };
+
+    const handleClearTask = (clearedTask) => {
+        setProjects((prev) => {
+            const newProjects = prev.map((project) => {
+                if (project.id === clearedTask.projectId) {
+                    const newTasks = project.tasks.map((task) => {
+                        if (task.id === clearedTask.id) {
+                            return {
+                                ...task,
+                                isActive: false,
+                            };
+                        }
+                        return task;
+                    });
+
+                    const newProject = {
+                        ...project,
+                        tasks: newTasks,
+                    };
+                    return newProject;
+                }
+
+                return project;
+            });
+            return newProjects;
+        });
     };
 
     return (
@@ -53,6 +123,8 @@ function App() {
                 {mode === 'edit' && (
                     <ProjectDetails
                         project={activeProject}
+                        onClearTask={handleClearTask}
+                        onAddTask={handleAddTask}
                         onDelete={handleProjectDeletion}
                     />
                 )}

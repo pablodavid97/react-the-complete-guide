@@ -1,7 +1,8 @@
 .project-form {
     display: flex;
     flex-direction: column;
-    width: 500px;
+    width: 75vw;
+    padding: 5rem 10rem;
 }
 
 .form-buttons {

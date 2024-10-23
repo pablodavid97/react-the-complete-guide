@@ -1,6 +1,8 @@
 .project-details {
-    padding: 5rem;
+    padding: 5rem 15rem;
+    margin-top: 3rem;
     background-color: #f9f9f9;
+    width: 75vw;
 }
 
 .details-header {

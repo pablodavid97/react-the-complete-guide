@@ -1,0 +1,42 @@
+.tasks-section {
+    margin-top: 3rem;
+    margin-bottom: 3rem;
+}
+
+.tasks-section input {
+    margin-right: 20px;
+    width: 300px;
+    padding: 0.5rem;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+}
+
+.tasks-section button {
+    background: none;
+    border: none;
+    font-size: 1rem;
+    color: #8c8686;
+    padding: 0.5rem 1rem;
+    border-radius: 5px;
+}
+
+.tasks-section button:hover {
+    color: #5a5454;
+}
+
+.tasks-list {
+    background-color: #dddddd;
+    margin-top: 3rem;
+    padding: 3rem;
+    list-style-type: none;
+}
+
+.tasks-list li {
+    display: flex;
+    justify-content: space-between;
+    gap: 100px;
+}
+
+.clearedTask {
+    text-decoration: line-through;
+}

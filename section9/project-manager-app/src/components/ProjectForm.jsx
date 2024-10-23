@@ -3,12 +3,16 @@ import TextInput from './TextInput';
 import TextArea from './TextArea';
 import DatePicker from './DatePicker';
 import styles from './ProjectForm.module.css';
+import { generateId } from '../util';
 
 const ProjectForm = ({ onCancel, onSave }) => {
     const [project, setProject] = useState({
+        id: generateId(),
         title: '',
         description: '',
         dueDate: '',
+        tasks: [],
+        isActive: false,
     });
 
     const handleTitleChange = (event) => {
