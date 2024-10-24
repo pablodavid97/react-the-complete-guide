@@ -3,6 +3,8 @@
     margin-top: 3rem;
     background-color: #f9f9f9;
     width: 75vw;
+    height: 85vh;
+    overflow-y: auto;
 }
 
 .details-header {

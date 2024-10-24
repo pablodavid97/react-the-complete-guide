@@ -53,7 +53,7 @@ function App() {
 
     const handleProjectDeletion = () => {
         setProjects((prev) =>
-            prev.filter((project) => project.title !== activeProject.title)
+            prev.filter((project) => project.id !== activeProject.id)
         );
         setMode(null);
     };

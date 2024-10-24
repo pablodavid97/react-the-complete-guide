@@ -33,5 +33,11 @@
 }
 
 .form-buttons .btn-secondary:hover {
-    background-color: #e8e8e8
+    background-color: #e8e8e8;
+}
+
+.form-buttons .btn-disabled {
+    color: #c2c2c2;
+    cursor: auto;
+    border-radius: 5px;
 }

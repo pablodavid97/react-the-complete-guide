@@ -45,6 +45,14 @@ const ProjectForm = ({ onCancel, onSave, projects }) => {
                     title: newTitle,
                 };
             });
+        } else {
+            setValidations((prev) => ({
+                ...prev,
+                title: {
+                    isValid: true,
+                    message: '',
+                },
+            }));
         }
     };
 
@@ -76,6 +84,14 @@ const ProjectForm = ({ onCancel, onSave, projects }) => {
                     dueDate: newDueDate,
                 };
             });
+        } else {
+            setValidations((prev) => ({
+                ...prev,
+                dueDate: {
+                    isValid: true,
+                    message: '',
+                },
+            }));
         }
     };
 
@@ -107,6 +123,20 @@ const ProjectForm = ({ onCancel, onSave, projects }) => {
         return true;
     };
 
+    const isFormValid = () => {
+        console.log('validations: ', validations);
+        let isValid = true;
+        Object.values(validations).forEach((validation) => {
+            if (!validation.isValid) {
+                isValid = false;
+            }
+        });
+
+        return isValid;
+    };
+
+    console.log('is form valid?: ', isFormValid());
+
     return (
         <form className={styles['project-form']} onSubmit={handleSubmit}>
             <div className={styles['form-buttons']}>
@@ -117,7 +147,15 @@ const ProjectForm = ({ onCancel, onSave, projects }) => {
                 >
                     Cancel
                 </button>
-                <button className={styles['btn-primary']} type='submit'>
+                <button
+                    className={`${
+                        !isFormValid()
+                            ? styles['btn-disabled']
+                            : styles['btn-primary']
+                    }`}
+                    type='submit'
+                    disabled={!isFormValid()}
+                >
                     Save
                 </button>
             </div>
