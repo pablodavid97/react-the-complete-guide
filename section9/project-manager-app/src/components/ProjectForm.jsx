@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useRef } from 'react';
 import TextInput from './TextInput';
 import TextArea from './TextArea';
 import DatePicker from './DatePicker';
@@ -6,14 +6,9 @@ import styles from './ProjectForm.module.css';
 import { generateId } from '../util';
 
 const ProjectForm = ({ onCancel, onSave, projects }) => {
-    const [project, setProject] = useState({
-        id: generateId(),
-        title: '',
-        description: '',
-        dueDate: '',
-        tasks: [],
-        isActive: false,
-    });
+    const titleRef = useRef();
+    const descriptionRef = useRef();
+    const dueDateRef = useRef();
     const [validations, setValidations] = useState({
         title: {
             isValid: true,
@@ -27,11 +22,6 @@ const ProjectForm = ({ onCancel, onSave, projects }) => {
 
     const handleTitleChange = (event) => {
         const { value: newTitle } = event.target;
-
-        setProject((prev) => ({
-            ...prev,
-            title: newTitle,
-        }));
 
         if (!isProjectTitleUnique(newTitle)) {
             setValidations((prev) => {
@@ -56,21 +46,8 @@ const ProjectForm = ({ onCancel, onSave, projects }) => {
         }
     };
 
-    const handleDescriptionChange = (event) => {
-        const { value: newDescription } = event.target;
-        setProject((prev) => ({
-            ...prev,
-            description: newDescription,
-        }));
-    };
-
     const handleDueDateChange = (event) => {
         const { value: newDueDate } = event.target;
-
-        setProject((prev) => ({
-            ...prev,
-            dueDate: newDueDate,
-        }));
 
         if (!isDueDateInTheFuture(newDueDate)) {
             setValidations((prev) => {
@@ -97,7 +74,14 @@ const ProjectForm = ({ onCancel, onSave, projects }) => {
 
     const handleSubmit = (event) => {
         event.preventDefault();
-        onSave(project);
+        onSave({
+            id: generateId(),
+            title: titleRef.current.value,
+            description: descriptionRef.current.value,
+            dueDate: dueDateRef.current.value,
+            tasks: [],
+            isActive: false,
+        });
     };
 
     const isProjectTitleUnique = (title) => {
@@ -161,19 +145,15 @@ const ProjectForm = ({ onCancel, onSave, projects }) => {
             </div>
             <TextInput
                 label='Title'
-                value={project.title}
+                ref={titleRef}
                 onChange={handleTitleChange}
                 validation={validations.title}
                 required={true}
             />
-            <TextArea
-                label='Description'
-                value={project.description}
-                onChange={handleDescriptionChange}
-            />
+            <TextArea label='Description' ref={descriptionRef} />
             <DatePicker
                 label='Due date'
-                value={project.dueDate}
+                ref={dueDateRef}
                 onChange={handleDueDateChange}
                 validation={validations.dueDate}
                 required={true}

@@ -1,6 +1,7 @@
+import { forwardRef } from 'react';
 import styles from './InputGroup.module.css';
 
-const TextInput = ({ label, value, onChange, validation, required }) => {
+const TextInput = forwardRef(({ label, validation, ...props }, ref) => {
     return (
         <div
             className={`${styles['input-group']} ${
@@ -8,15 +9,10 @@ const TextInput = ({ label, value, onChange, validation, required }) => {
             }`}
         >
             <label>{label}</label>
-            <input
-                type='text'
-                value={value}
-                onChange={onChange}
-                required={required}
-            />
+            <input ref={ref} type='text' {...props} />
             {!validation.isValid && <span>{validation.message}</span>}
         </div>
     );
-};
+});
 
 export default TextInput;
