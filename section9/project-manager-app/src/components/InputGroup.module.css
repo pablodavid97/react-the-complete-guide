@@ -19,3 +19,15 @@
     height: 100px;
     resize: vertical;
 }
+
+.invalid label {
+    color: red;
+}
+
+.invalid input {
+    border-color: red;
+}
+
+.invalid span {
+    color: red;
+}

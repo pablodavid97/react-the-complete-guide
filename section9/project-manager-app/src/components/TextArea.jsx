@@ -1,8 +1,8 @@
-import './InputGroup.css';
+import styles from './InputGroup.module.css';
 
 const TextArea = ({ label, value, onChange }) => {
     return (
-        <div className='input-group'>
+        <div className={styles['input-group']}>
             <label>{label}</label>
             <textarea value={value} onChange={onChange} />
         </div>

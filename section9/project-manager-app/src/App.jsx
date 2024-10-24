@@ -118,6 +118,7 @@ function App() {
                     <ProjectForm
                         onCancel={handleCancelProject}
                         onSave={handleSaveProject}
+                        projects={projects}
                     />
                 )}
                 {mode === 'edit' && (
