@@ -2,7 +2,12 @@ import img from '../assets/logo.jpg';
 
 const Header = ({ cart }) => {
     console.log('cart: ', cart);
-    const totalItems = Object.values(cart).length;
+    let totalItems = 0;
+
+    Object.entries(cart).forEach(([, item]) => {
+        console.log('item: ', item);
+        totalItems += item.qnty;
+    });
     return (
         <header id='main-header'>
             <div id='title'>

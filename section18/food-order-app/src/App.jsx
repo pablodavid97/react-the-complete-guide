@@ -11,8 +11,20 @@ function App() {
     const [isLoading, setIsLoading] = useState(false);
     const [cart, setCart] = useState({});
 
-    const addProductToCart = (product) => {
-        setCart((prev) => ({ ...prev, [product.id]: { product, qnty: 1 } }));
+    const addProductToCart = (newProduct) => {
+        const product = cart[newProduct.id];
+
+        if (product) {
+            setCart((prev) => ({
+                ...prev,
+                [newProduct.id]: { product, qnty: product.qnty + 1 },
+            }));
+        } else {
+            setCart((prev) => ({
+                ...prev,
+                [newProduct.id]: { product: newProduct, qnty: 1 },
+            }));
+        }
     };
 
     useEffect(() => {
