@@ -1,6 +1,6 @@
 import img from '../assets/logo.jpg';
 
-const Header = ({ cart }) => {
+const Header = ({ cart, onOpenCart }) => {
     console.log('cart: ', cart);
     let totalItems = 0;
 
@@ -14,7 +14,9 @@ const Header = ({ cart }) => {
                 <img src={img} alt='Dinner plate with view of city.' />
                 REACTFOOD
             </div>
-            <button className='text-button'>Cart ({totalItems})</button>
+            <button onClick={onOpenCart} className='text-button'>
+                Cart ({totalItems})
+            </button>
         </header>
     );
 };

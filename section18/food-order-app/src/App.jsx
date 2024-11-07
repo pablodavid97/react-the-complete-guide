@@ -1,7 +1,9 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 
 import Header from './components/Header';
 import Products from './components/Products';
+import Modal from './components/Modal';
+import Cart from './components/Cart';
 
 import { fetchMeals } from './util';
 
@@ -10,6 +12,7 @@ function App() {
     const [productFetchError, setProductFetchError] = useState();
     const [isLoading, setIsLoading] = useState(false);
     const [cart, setCart] = useState({});
+    const modalRef = useRef();
 
     const addProductToCart = (newProduct) => {
         const product = cart[newProduct.id];
@@ -17,7 +20,10 @@ function App() {
         if (product) {
             setCart((prev) => ({
                 ...prev,
-                [newProduct.id]: { product, qnty: product.qnty + 1 },
+                [newProduct.id]: {
+                    product: newProduct,
+                    qnty: product.qnty + 1,
+                },
             }));
         } else {
             setCart((prev) => ({
@@ -43,12 +49,19 @@ function App() {
         retrieveMeals();
     }, []);
 
+    const openCart = () => {
+        modalRef.current.open();
+    };
+
     console.log('products: ', products);
     console.log('cart: ', cart);
 
     return (
         <>
-            <Header cart={cart} />
+            <Modal ref={modalRef}>
+                <Cart cart={cart} />
+            </Modal>
+            <Header cart={cart} onOpenCart={openCart} />
             <main className='container'>
                 <Products
                     products={products}
