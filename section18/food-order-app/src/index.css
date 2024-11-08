@@ -178,6 +178,12 @@ h1 {
   color: #ffab04;
 }
 
+.modal-actions button.disabled {
+  background-color: #d1ccba;
+  border: none;
+  cursor: default
+}
+
 .control {
   margin: 0.5rem 0;
   display: flex;
