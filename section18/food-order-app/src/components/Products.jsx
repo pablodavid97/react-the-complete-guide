@@ -1,4 +1,8 @@
+import { useContext } from 'react';
+import { CartContext } from '../store/cart-context';
+
 const Products = ({ products, hasError, isLoading, onAddToCart }) => {
+    const { addItemToCart } = useContext(CartContext);
     if (isLoading) {
         return <p>Loading data...</p>;
     }
@@ -26,7 +30,7 @@ const Products = ({ products, hasError, isLoading, onAddToCart }) => {
                             </p>
                             <button
                                 className='meal-item-actions button'
-                                onClick={() => onAddToCart(product)}
+                                onClick={() => addItemToCart(product)}
                             >
                                 Add to Cart
                             </button>

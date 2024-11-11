@@ -1,51 +1,30 @@
-import { useState, useEffect, useRef } from 'react';
+import { useState, useEffect, useRef, useContext } from 'react';
 
 import Header from './components/Header';
 import Products from './components/Products';
 import Modal from './components/Modal';
 import Cart from './components/Cart';
 import CheckoutForm from './components/CheckoutForm';
+import { CartContext } from './store/cart-context';
 
 import { fetchMeals, submitOrder } from './http';
 
 function App() {
     const [products, setProducts] = useState([]);
     const [productFetchError, setProductFetchError] = useState();
-    const [isLoading, setIsLoading] = useState(false);
-    const [cart, setCart] = useState({});
+    const [orderCreationError, setOrderCreationError] = useState();
+    const [loadingProducts, setloadingProducts] = useState(false);
+    const [loadingOrder, setLoadingOrder] = useState(false);
     const [modalType, setModalType] = useState('cart');
     const [order, setOrder] = useState();
     const modalRef = useRef();
     const formRef = useRef();
-
-    const cartItems = Object.entries(cart);
-    let cartTotal = 0;
-    cartItems.forEach(([, item]) => {
-        cartTotal += item.qnty * item.product.price;
-    });
-
-    const addProductToCart = (newProduct) => {
-        const product = cart[newProduct.id];
-
-        if (product) {
-            setCart((prev) => ({
-                ...prev,
-                [newProduct.id]: {
-                    product: newProduct,
-                    qnty: product.qnty + 1,
-                },
-            }));
-        } else {
-            setCart((prev) => ({
-                ...prev,
-                [newProduct.id]: { product: newProduct, qnty: 1 },
-            }));
-        }
-    };
+    const { cart, emptyCart, totalItems } = useContext(CartContext);
+    const disableSubmit = totalItems === 0 || !order;
 
     useEffect(() => {
         const retrieveMeals = async () => {
-            setIsLoading(true);
+            setloadingProducts(true);
             try {
                 const data = await fetchMeals();
                 setProducts(data);
@@ -54,27 +33,27 @@ function App() {
                     message: error.message || 'error fetching data',
                 });
             }
-            setIsLoading(false);
+            setloadingProducts(false);
         };
         retrieveMeals();
     }, []);
 
     useEffect(() => {
         const submitCheckoutForm = async () => {
+            setLoadingOrder(true);
             if (order) {
                 try {
-                    const response = await submitOrder(order);
-
-                    console.log('response: ', response);
-
-                    modalRef.current.close();
-
-                    setCart({});
+                    await submitOrder(order);
+                    emptyCart();
                     setModalType('cart');
                 } catch (error) {
-                    console.log('error: ', error);
+                    setOrderCreationError({
+                        message: error.message || 'Error when creating order.',
+                    });
                 }
+                modalRef.current.close();
             }
+            setLoadingOrder(false);
         };
         submitCheckoutForm();
     }, [order]);
@@ -83,69 +62,23 @@ function App() {
         modalRef.current.open();
     };
 
-    const handleRemoveItem = (productId) => {
-        const item = cart[productId];
-
-        if (item.qnty === 1) {
-            const { [productId]: _, ...newCart } = cart;
-            setCart(newCart);
-        } else {
-            setCart((prev) => ({
-                ...prev,
-                [productId]: {
-                    product: item.product,
-                    qnty: item.qnty - 1,
-                },
-            }));
-        }
-    };
-
-    const handleAddItem = (productId) => {
-        const item = cart[productId];
-
-        setCart((prev) => ({
-            ...prev,
-            [productId]: {
-                product: item.product,
-                qnty: item.qnty + 1,
-            },
-        }));
-    };
-
-    const proceedToCheckout = () => {
-        console.log('gotcha!!!');
-        setModalType('checkout');
-    };
-
-    console.log('products: ', products);
-    console.log('cart: ', cart);
-
     const handleModalSubmit = (event) => {
         event.preventDefault();
         if (modalType === 'cart') {
-            proceedToCheckout();
+            setModalType('checkout');
         }
 
         if (modalType === 'checkout') {
-            console.log('form ref: ', formRef);
-
             if (formRef.current) {
                 const formData = new FormData(formRef.current);
                 const data = Object.fromEntries(formData.entries());
-
-                console.log('form data: ', data);
-                console.log('cart: ', cart);
 
                 setOrder({
                     customer: data,
                     items: cart,
                 });
-
-                console.log('submitting data...');
             }
         }
-
-        return () => {};
     };
 
     const handleModalClose = () => {
@@ -162,33 +95,24 @@ function App() {
                         : 'Submit Order'
                 }`}
                 onSubmit={handleModalSubmit}
-                submitBtnClassName='button'
                 onClose={handleModalClose}
-                // TODO: Address disable status and styling...
-                // submitBtnClassName={`button ${
-                //     cartItems.length === 0 ? 'disabled' : null
-                // }`}
-                // disableSubmit={cartItems.length === 0}
+                disableSubmit={disableSubmit}
             >
-                {modalType === 'cart' && (
-                    <Cart
-                        cartItems={cartItems}
-                        onAddItem={handleAddItem}
-                        onRemoveItem={handleRemoveItem}
-                        cartTotal={cartTotal}
+                {modalType === 'cart' && <Cart />}
+                {modalType === 'checkout' && (
+                    <CheckoutForm
+                        ref={formRef}
+                        isLoading={loadingOrder}
+                        hasError={orderCreationError}
                     />
                 )}
-                {modalType === 'checkout' && (
-                    <CheckoutForm cartTotal={cartTotal} ref={formRef} />
-                )}
             </Modal>
-            <Header cart={cart} onOpenCart={openCart} />
+            <Header onOpenCart={openCart} />
             <main className='container'>
                 <Products
                     products={products}
                     hasError={productFetchError}
-                    isLoading={isLoading}
-                    onAddToCart={addProductToCart}
+                    isLoading={loadingProducts}
                 />
             </main>
         </>

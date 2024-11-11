@@ -1,4 +1,9 @@
-const Cart = ({ cartItems, onAddItem, onRemoveItem, cartTotal }) => {
+import { useContext } from 'react';
+import { CartContext } from '../store/cart-context';
+
+const Cart = () => {
+    const { cartItems, cartTotal, addItemToCart, removeItemFromCart } =
+        useContext(CartContext);
     console.log('cart items: ', cartItems);
 
     return (
@@ -15,15 +20,20 @@ const Cart = ({ cartItems, onAddItem, onRemoveItem, cartTotal }) => {
                                 <li key={key} className='cart-item'>
                                     {item.product.name} - {item.qnty} x $
                                     {item.product.price}
-                                    {/* TODO: Add click handlers to update item qnties */}
                                     <span className='cart-item-actions'>
                                         <button
-                                            onClick={() => onRemoveItem(key)}
+                                            onClick={() =>
+                                                removeItemFromCart(key)
+                                            }
                                         >
                                             -
                                         </button>
                                         {item.qnty}
-                                        <button onClick={() => onAddItem(key)}>
+                                        <button
+                                            onClick={() =>
+                                                addItemToCart(item.product)
+                                            }
+                                        >
                                             +
                                         </button>
                                     </span>

@@ -1,13 +1,11 @@
+import { useContext } from 'react';
+
 import img from '../assets/logo.jpg';
+import { CartContext } from '../store/cart-context';
 
-const Header = ({ cart, onOpenCart }) => {
-    console.log('cart: ', cart);
-    let totalItems = 0;
+const Header = ({ onOpenCart }) => {
+    const { totalItems } = useContext(CartContext);
 
-    Object.entries(cart).forEach(([, item]) => {
-        console.log('item: ', item);
-        totalItems += item.qnty;
-    });
     return (
         <header id='main-header'>
             <div id='title'>

@@ -2,17 +2,12 @@ import { forwardRef, useImperativeHandle, useRef } from 'react';
 import { createPortal } from 'react-dom';
 
 const Modal = forwardRef(function Modal(
-    {
-        children,
-        onClose,
-        submitBtnText,
-        onSubmit,
-        submitBtnClassName,
-        disableSubmit,
-    },
+    { children, onClose, submitBtnText, onSubmit, disableSubmit },
     ref
 ) {
     const dialog = useRef();
+
+    console.log('disable submit: ', disableSubmit);
 
     useImperativeHandle(ref, () => {
         return {
@@ -35,7 +30,7 @@ const Modal = forwardRef(function Modal(
                 <button
                     type='button'
                     onClick={onSubmit}
-                    className={submitBtnClassName}
+                    className={`button ${disableSubmit ? 'invalid' : ''}`}
                     disabled={disableSubmit}
                 >
                     {submitBtnText}

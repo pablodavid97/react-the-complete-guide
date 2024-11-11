@@ -1,8 +1,21 @@
-import { forwardRef } from 'react';
+import { forwardRef, useContext } from 'react';
 import Input from './Input';
 import { isValidEmail } from '../util';
+import { CartContext } from '../store/cart-context';
 
-const CheckoutForm = forwardRef(function CheckoutForm({ cartTotal }, ref) {
+const CheckoutForm = forwardRef(function CheckoutForm(
+    { isLoading, hasError },
+    ref
+) {
+    const { cartTotal } = useContext(CartContext);
+    if (isLoading) {
+        return <p>Creating order...Please wait.</p>;
+    }
+
+    if (hasError) {
+        return <p>{hasError.message}</p>;
+    }
+
     return (
         <form ref={ref}>
             <h2>Checkout</h2>
