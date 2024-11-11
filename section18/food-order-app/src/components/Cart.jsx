@@ -1,10 +1,4 @@
-const Cart = ({ cartItems, onAddItem, onRemoveItem }) => {
-    let cartTotal = 0;
-
-    cartItems.forEach(([, item]) => {
-        cartTotal += item.qnty * item.product.price;
-    });
-
+const Cart = ({ cartItems, onAddItem, onRemoveItem, cartTotal }) => {
     console.log('cart items: ', cartItems);
 
     return (

@@ -6,7 +6,7 @@ import Modal from './components/Modal';
 import Cart from './components/Cart';
 import CheckoutForm from './components/CheckoutForm';
 
-import { fetchMeals } from './util';
+import { fetchMeals, submitOrder } from './http';
 
 function App() {
     const [products, setProducts] = useState([]);
@@ -14,7 +14,9 @@ function App() {
     const [isLoading, setIsLoading] = useState(false);
     const [cart, setCart] = useState({});
     const [modalType, setModalType] = useState('cart');
+    const [order, setOrder] = useState();
     const modalRef = useRef();
+    const formRef = useRef();
 
     const cartItems = Object.entries(cart);
     let cartTotal = 0;
@@ -57,6 +59,26 @@ function App() {
         retrieveMeals();
     }, []);
 
+    useEffect(() => {
+        const submitCheckoutForm = async () => {
+            if (order) {
+                try {
+                    const response = await submitOrder(order);
+
+                    console.log('response: ', response);
+
+                    modalRef.current.close();
+
+                    setCart({});
+                    setModalType('cart');
+                } catch (error) {
+                    console.log('error: ', error);
+                }
+            }
+        };
+        submitCheckoutForm();
+    }, [order]);
+
     const openCart = () => {
         modalRef.current.open();
     };
@@ -91,14 +113,40 @@ function App() {
     };
 
     const proceedToCheckout = () => {
+        console.log('gotcha!!!');
         setModalType('checkout');
     };
 
     console.log('products: ', products);
     console.log('cart: ', cart);
 
-    const handleModalSubmit =
-        modalType === 'cart' ? proceedToCheckout : () => {};
+    const handleModalSubmit = (event) => {
+        event.preventDefault();
+        if (modalType === 'cart') {
+            proceedToCheckout();
+        }
+
+        if (modalType === 'checkout') {
+            console.log('form ref: ', formRef);
+
+            if (formRef.current) {
+                const formData = new FormData(formRef.current);
+                const data = Object.fromEntries(formData.entries());
+
+                console.log('form data: ', data);
+                console.log('cart: ', cart);
+
+                setOrder({
+                    customer: data,
+                    items: cart,
+                });
+
+                console.log('submitting data...');
+            }
+        }
+
+        return () => {};
+    };
 
     const handleModalClose = () => {
         setModalType('cart');
@@ -116,6 +164,7 @@ function App() {
                 onSubmit={handleModalSubmit}
                 submitBtnClassName='button'
                 onClose={handleModalClose}
+                // TODO: Address disable status and styling...
                 // submitBtnClassName={`button ${
                 //     cartItems.length === 0 ? 'disabled' : null
                 // }`}
@@ -130,7 +179,7 @@ function App() {
                     />
                 )}
                 {modalType === 'checkout' && (
-                    <CheckoutForm cartTotal={cartTotal} />
+                    <CheckoutForm cartTotal={cartTotal} ref={formRef} />
                 )}
             </Modal>
             <Header cart={cart} onOpenCart={openCart} />

@@ -270,3 +270,11 @@ h1 {
 .container {
   text-align: center;
 }
+
+.control .invalid {
+  border: 2px solid red;
+}
+
+.invalid-text {
+  color: red;
+}
