@@ -30,7 +30,7 @@ const Modal = forwardRef(function Modal(
                 <button
                     type='button'
                     onClick={onSubmit}
-                    className={`button ${disableSubmit ? 'invalid' : ''}`}
+                    className={`button ${disableSubmit ? 'disabled' : ''}`}
                     disabled={disableSubmit}
                 >
                     {submitBtnText}

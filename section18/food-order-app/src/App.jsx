@@ -8,6 +8,7 @@ import CheckoutForm from './components/CheckoutForm';
 import { CartContext } from './store/cart-context';
 
 import { fetchMeals, submitOrder } from './http';
+import { isValidEmail } from './util';
 
 function App() {
     const [products, setProducts] = useState([]);
@@ -20,7 +21,7 @@ function App() {
     const modalRef = useRef();
     const formRef = useRef();
     const { cart, emptyCart, totalItems } = useContext(CartContext);
-    const disableSubmit = totalItems === 0 || !order;
+    let disableSubmit = false;
 
     useEffect(() => {
         const retrieveMeals = async () => {
@@ -63,12 +64,15 @@ function App() {
     };
 
     const handleModalSubmit = (event) => {
+        console.log('gotcha!!!');
         event.preventDefault();
         if (modalType === 'cart') {
             setModalType('checkout');
         }
 
         if (modalType === 'checkout') {
+            console.log('order: ', order);
+            console.log('totalItems: ', totalItems);
             if (formRef.current) {
                 const formData = new FormData(formRef.current);
                 const data = Object.fromEntries(formData.entries());
@@ -84,6 +88,16 @@ function App() {
     const handleModalClose = () => {
         setModalType('cart');
     };
+
+    if (modalType === 'cart') {
+        disableSubmit = totalItems === 0;
+    } else {
+        console.log('form ref: ', formRef.current);
+        // const formData = new FormData(formRef.current);
+        // const data = Object.fromEntries(formData.entries());
+        // disableSubmit = !isValidEmail(data.email);
+        // console.log('data: ', data);
+    }
 
     return (
         <>
