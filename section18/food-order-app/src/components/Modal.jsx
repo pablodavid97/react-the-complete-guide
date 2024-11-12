@@ -1,13 +1,11 @@
-import { forwardRef, useImperativeHandle, useRef } from 'react';
+import { forwardRef, useImperativeHandle, useRef, useContext } from 'react';
 import { createPortal } from 'react-dom';
+import { ModalContext } from '../store/modal-context';
 
-const Modal = forwardRef(function Modal(
-    { children, onClose, submitBtnText, onSubmit, disableSubmit },
-    ref
-) {
+const Modal = forwardRef(function Modal({ children, submitBtnText }, ref) {
     const dialog = useRef();
-
-    console.log('disable submit: ', disableSubmit);
+    const { handleModalSubmit, handleModalClose, disableModal } =
+        useContext(ModalContext);
 
     useImperativeHandle(ref, () => {
         return {
@@ -24,14 +22,14 @@ const Modal = forwardRef(function Modal(
         <dialog className='modal' ref={dialog}>
             {children}
             <form method='dialog' className='modal-actions'>
-                <button className='text-button' onClick={onClose}>
+                <button className='text-button' onClick={handleModalClose}>
                     Close
                 </button>
                 <button
                     type='button'
-                    onClick={onSubmit}
-                    className={`button ${disableSubmit ? 'disabled' : ''}`}
-                    disabled={disableSubmit}
+                    onClick={handleModalSubmit}
+                    className={`button ${disableModal ? 'disabled' : ''}`}
+                    disabled={disableModal}
                 >
                     {submitBtnText}
                 </button>

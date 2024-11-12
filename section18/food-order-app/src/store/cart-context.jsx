@@ -12,14 +12,9 @@ export const CartContext = createContext({
 
 export default function CartContextProvider({ children }) {
     const [cart, setCart] = useState({});
+    const [totalItems, setTotalItems] = useState(0);
+    const [cartTotal, setCartTotal] = useState(0);
     const cartItems = Object.entries(cart);
-    let cartTotal = 0;
-    let totalItems = 0;
-
-    cartItems.forEach(([, item]) => {
-        cartTotal += item.qnty * item.product.price;
-        totalItems += item.qnty;
-    });
 
     const addItemToCart = (newProduct) => {
         const product = cart[newProduct.id];
@@ -38,6 +33,9 @@ export default function CartContextProvider({ children }) {
                 [newProduct.id]: { product: newProduct, qnty: 1 },
             }));
         }
+
+        setTotalItems((prev) => prev + 1);
+        setCartTotal((prev) => prev + parseFloat(newProduct.price));
     };
 
     const removeItemFromCart = (productId) => {
@@ -55,17 +53,22 @@ export default function CartContextProvider({ children }) {
                 },
             }));
         }
+        console.log('item: ', item);
+        setTotalItems((prev) => prev - 1);
+        setCartTotal((prev) => prev - parseFloat(item.product.price));
     };
 
     const emptyCart = () => {
         setCart({});
     };
 
+    console.log('totalItems: ', totalItems);
+
     const ctxValue = {
-        cartItems: cartItems,
-        cart: {},
-        cartTotal: cartTotal,
-        totalItems: totalItems,
+        cartItems,
+        cart,
+        cartTotal,
+        totalItems,
         addItemToCart,
         removeItemFromCart,
         emptyCart,

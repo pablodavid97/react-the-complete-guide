@@ -4,7 +4,6 @@ import { CartContext } from '../store/cart-context';
 const Cart = () => {
     const { cartItems, cartTotal, addItemToCart, removeItemFromCart } =
         useContext(CartContext);
-    console.log('cart items: ', cartItems);
 
     return (
         <div className='cart'>
@@ -14,8 +13,6 @@ const Cart = () => {
                 <>
                     <ul>
                         {cartItems.map(([key, item]) => {
-                            console.log('key: ', key);
-                            console.log('item: ', item);
                             return (
                                 <li key={key} className='cart-item'>
                                     {item.product.name} - {item.qnty} x $

@@ -2,12 +2,17 @@ import { forwardRef, useContext } from 'react';
 import Input from './Input';
 import { isValidEmail } from '../util';
 import { CartContext } from '../store/cart-context';
+import { ModalContext } from '../store/modal-context';
 
 const CheckoutForm = forwardRef(function CheckoutForm(
     { isLoading, hasError },
     ref
 ) {
-    const { cartTotal } = useContext(CartContext);
+    const { cartTotal, cart } = useContext(CartContext);
+    const { setDisableModal } = useContext(ModalContext);
+
+    console.log('cart: ', cart);
+
     if (isLoading) {
         return <p>Creating order...Please wait.</p>;
     }
@@ -15,6 +20,18 @@ const CheckoutForm = forwardRef(function CheckoutForm(
     if (hasError) {
         return <p>{hasError.message}</p>;
     }
+
+    const handleEmailValidation = (email) => {
+        const validEmail = isValidEmail(email);
+
+        if (!validEmail) {
+            setDisableModal(true);
+        } else {
+            setDisableModal(false);
+        }
+
+        return validEmail;
+    };
 
     return (
         <form ref={ref}>
@@ -28,7 +45,7 @@ const CheckoutForm = forwardRef(function CheckoutForm(
                 label='E-Mail Address'
                 type='email'
                 name='email'
-                validationFn={isValidEmail}
+                validationFn={handleEmailValidation}
                 validationMsg='Please enter a valid email address.'
             />
 
