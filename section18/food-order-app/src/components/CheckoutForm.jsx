@@ -4,22 +4,9 @@ import { isValidEmail } from '../util';
 import { CartContext } from '../store/cart-context';
 import { ModalContext } from '../store/modal-context';
 
-const CheckoutForm = forwardRef(function CheckoutForm(
-    { isLoading, hasError },
-    ref
-) {
+const CheckoutForm = forwardRef(function CheckoutForm(_, ref) {
     const { cartTotal, cart } = useContext(CartContext);
     const { setDisableModal } = useContext(ModalContext);
-
-    console.log('cart: ', cart);
-
-    if (isLoading) {
-        return <p>Creating order...Please wait.</p>;
-    }
-
-    if (hasError) {
-        return <p>{hasError.message}</p>;
-    }
 
     const handleEmailValidation = (email) => {
         const validEmail = isValidEmail(email);

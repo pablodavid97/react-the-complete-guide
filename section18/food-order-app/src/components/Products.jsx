@@ -1,15 +1,8 @@
 import { useContext } from 'react';
 import { CartContext } from '../store/cart-context';
 
-const Products = ({ products, hasError, isLoading, onAddToCart }) => {
+const Products = ({ products }) => {
     const { addItemToCart } = useContext(CartContext);
-    if (isLoading) {
-        return <p>Loading data...</p>;
-    }
-
-    if (hasError) {
-        return <p>{hasError.message}</p>;
-    }
 
     return (
         <ul id='meals'>

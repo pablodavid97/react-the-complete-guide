@@ -60,6 +60,8 @@ export default function CartContextProvider({ children }) {
 
     const emptyCart = () => {
         setCart({});
+        setCartTotal(0);
+        setTotalItems(0);
     };
 
     console.log('totalItems: ', totalItems);

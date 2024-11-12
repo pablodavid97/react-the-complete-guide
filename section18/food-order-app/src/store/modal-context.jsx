@@ -27,7 +27,6 @@ const ModalContextProvider = ({ children }) => {
     }, [totalItems]);
 
     const handleModalSubmit = (event) => {
-        // TODO: Empty cart properly after subit...
         event.preventDefault();
         if (modalType === 'cart') {
             setModalType('checkout');

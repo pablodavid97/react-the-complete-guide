@@ -9,47 +9,59 @@ import { ModalContext } from './store/modal-context';
 
 import { fetchMeals, submitOrder } from './http';
 
+// TODO: move use effects into useFetch hook
 function App() {
     const [products, setProducts] = useState([]);
-    const [productFetchError, setProductFetchError] = useState();
-    const [orderCreationError, setOrderCreationError] = useState();
-    const [loadingProducts, setloadingProducts] = useState(false);
-    const [loadingOrder, setLoadingOrder] = useState(false);
+    const [hasError, setHasError] = useState();
+    const [isLoading, setIsLoading] = useState(false);
 
     const { modalRef, formRef, modalType, order } = useContext(ModalContext);
 
     useEffect(() => {
         const retrieveMeals = async () => {
-            setloadingProducts(true);
+            setHasError(null);
+            setIsLoading(true);
             try {
                 const data = await fetchMeals();
                 setProducts(data);
             } catch (error) {
-                setProductFetchError({
+                setHasError({
                     message: error.message || 'error fetching data',
                 });
             }
-            setloadingProducts(false);
+            setIsLoading(false);
         };
         retrieveMeals();
     }, []);
 
+    // TODO: This should be improved... only should be called when submit button is pressed, not when order changes.
     useEffect(() => {
         const submitCheckoutForm = async () => {
-            setLoadingOrder(true);
-            if (order) {
-                try {
-                    await submitOrder(order);
-                } catch (error) {
-                    setOrderCreationError({
-                        message: error.message || 'Error when creating order.',
-                    });
-                }
+            if (!order) return;
+            setHasError(null);
+            setIsLoading(true);
+            try {
+                await submitOrder(order);
+            } catch (error) {
+                console.log('error: ', error);
+                setHasError({
+                    message: error.message || 'Error when creating order.',
+                });
             }
-            setLoadingOrder(false);
+            setIsLoading(false);
         };
         submitCheckoutForm();
     }, [order]);
+
+    useEffect(() => {
+        const timer = setTimeout(() => {
+            setHasError(null);
+        }, [1000]);
+
+        return () => {
+            clearTimeout(timer);
+        };
+    }, [hasError]);
 
     return (
         <>
@@ -62,21 +74,13 @@ function App() {
                 }`}
             >
                 {modalType === 'cart' && <Cart />}
-                {modalType === 'checkout' && (
-                    <CheckoutForm
-                        ref={formRef}
-                        isLoading={loadingOrder}
-                        hasError={orderCreationError}
-                    />
-                )}
+                {modalType === 'checkout' && <CheckoutForm ref={formRef} />}
             </Modal>
             <Header />
             <main className='container'>
-                <Products
-                    products={products}
-                    hasError={productFetchError}
-                    isLoading={loadingProducts}
-                />
+                {isLoading && <p>Loading data...</p>}
+                {hasError && <p>{hasError.message}</p>}
+                {!isLoading && <Products products={products} />}
             </main>
         </>
     );
