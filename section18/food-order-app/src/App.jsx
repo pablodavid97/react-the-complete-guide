@@ -1,4 +1,4 @@
-import { useState, useEffect, useContext } from 'react';
+import { useContext } from 'react';
 
 import Header from './components/Header';
 import Products from './components/Products';
@@ -6,62 +6,32 @@ import Modal from './components/Modal';
 import Cart from './components/Cart';
 import CheckoutForm from './components/CheckoutForm';
 import { ModalContext } from './store/modal-context';
+import useFetch from './hooks/useFetch';
 
 import { fetchMeals, submitOrder } from './http';
 
-// TODO: move use effects into useFetch hook
 function App() {
-    const [products, setProducts] = useState([]);
-    const [hasError, setHasError] = useState();
-    const [isLoading, setIsLoading] = useState(false);
-
     const { modalRef, formRef, modalType, order } = useContext(ModalContext);
 
-    useEffect(() => {
-        const retrieveMeals = async () => {
-            setHasError(null);
-            setIsLoading(true);
-            try {
-                const data = await fetchMeals();
-                setProducts(data);
-            } catch (error) {
-                setHasError({
-                    message: error.message || 'error fetching data',
-                });
-            }
-            setIsLoading(false);
-        };
-        retrieveMeals();
-    }, []);
+    const {
+        data: products,
+        error: fetchingProductsError,
+        isLoading: loadingProducts,
+    } = useFetch(fetchMeals);
 
-    // TODO: This should be improved... only should be called when submit button is pressed, not when order changes.
-    useEffect(() => {
-        const submitCheckoutForm = async () => {
-            if (!order) return;
-            setHasError(null);
-            setIsLoading(true);
-            try {
-                await submitOrder(order);
-            } catch (error) {
-                console.log('error: ', error);
-                setHasError({
-                    message: error.message || 'Error when creating order.',
-                });
-            }
-            setIsLoading(false);
-        };
-        submitCheckoutForm();
-    }, [order]);
+    const { error: submitOrderError, isLoading: loadingSubmitOrder } = useFetch(
+        submitOrder,
+        { method: 'POST', data: order }
+    );
 
-    useEffect(() => {
-        const timer = setTimeout(() => {
-            setHasError(null);
-        }, [1000]);
-
-        return () => {
-            clearTimeout(timer);
-        };
-    }, [hasError]);
+    const isLoading = loadingProducts || loadingSubmitOrder;
+    const hasError =
+        fetchingProductsError || submitOrderError
+            ? {
+                  message:
+                      fetchingProductsError.message || submitOrderError.message,
+              }
+            : null;
 
     return (
         <>

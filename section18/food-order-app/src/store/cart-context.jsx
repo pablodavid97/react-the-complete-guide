@@ -64,8 +64,6 @@ export default function CartContextProvider({ children }) {
         setTotalItems(0);
     };
 
-    console.log('totalItems: ', totalItems);
-
     const ctxValue = {
         cartItems,
         cart,

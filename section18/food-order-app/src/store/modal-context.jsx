@@ -1,6 +1,5 @@
 import { createContext, useRef, useState, useContext, useEffect } from 'react';
 import { CartContext } from './cart-context';
-import { isValidEmail } from '../util';
 
 export const ModalContext = createContext({
     modalRef: null,
@@ -36,9 +35,6 @@ const ModalContextProvider = ({ children }) => {
             if (formRef.current) {
                 const formData = new FormData(formRef.current);
                 const data = Object.fromEntries(formData.entries());
-
-                console.log('cart: ', cart);
-                console.log('data: ', data);
 
                 setOrder({
                     customer: data,
