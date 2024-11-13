@@ -13,7 +13,7 @@ const useFetch = (fetchFn, options = { method: 'GET', data: {} }) => {
     useEffect(() => {
         const timer = setTimeout(() => {
             setError(null);
-        }, [1000]);
+        }, [3000]);
 
         return () => {
             clearTimeout(timer);
@@ -47,7 +47,8 @@ const useFetch = (fetchFn, options = { method: 'GET', data: {} }) => {
 
                     setIsLoading(true);
                     try {
-                        await fetchFn(options.data);
+                        const response = await fetchFn(options.data);
+                        setData(response);
                     } catch (error) {
                         setError({
                             message:

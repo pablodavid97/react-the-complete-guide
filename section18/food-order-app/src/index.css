@@ -278,3 +278,25 @@ h1 {
 .invalid-text {
   color: red;
 }
+
+.error-msg {
+  color: white;
+  background-color: red;
+  padding: 1rem;
+  font-weight: 500;
+  font-size: 1.2rem;
+  border-radius: 10px;
+  width: 30vw;
+  margin: 0 auto;
+  text-align: center;
+}
+
+.success {
+  width: 30vw;
+  text-align: center;
+  margin: 0 auto;
+  padding: 1rem;
+  background: green;
+  border-radius: 10px;
+  font-size: 1.2rem;
+}

@@ -1,11 +1,11 @@
-import { forwardRef, useContext } from 'react';
+import { forwardRef, useContext, useEffect } from 'react';
 import Input from './Input';
 import { isValidEmail } from '../util';
 import { CartContext } from '../store/cart-context';
 import { ModalContext } from '../store/modal-context';
 
 const CheckoutForm = forwardRef(function CheckoutForm(_, ref) {
-    const { cartTotal, cart } = useContext(CartContext);
+    const { cartTotal } = useContext(CartContext);
     const { setDisableModal } = useContext(ModalContext);
 
     const handleEmailValidation = (email) => {
@@ -26,7 +26,7 @@ const CheckoutForm = forwardRef(function CheckoutForm(_, ref) {
             <p>
                 Total Amount: <strong>${cartTotal.toFixed(2)}</strong>
             </p>
-            <Input id='name' label='Full Name' name='name' />
+            <Input id='name' label='Full Name' name='name' required />
             <Input
                 id='email'
                 label='E-Mail Address'
@@ -34,13 +34,19 @@ const CheckoutForm = forwardRef(function CheckoutForm(_, ref) {
                 name='email'
                 validationFn={handleEmailValidation}
                 validationMsg='Please enter a valid email address.'
+                required
             />
 
-            <Input id='street' label='Street' name='street' />
+            <Input id='street' label='Street' name='street' required />
 
             <div className='control-row'>
-                <Input id='postalCode' label='Postal Code' name='postal-code' />
-                <Input id='city' label='City' name='city' />
+                <Input
+                    id='postalCode'
+                    label='Postal Code'
+                    name='postal-code'
+                    required
+                />
+                <Input id='city' label='City' name='city' required />
             </div>
         </form>
     );

@@ -20,10 +20,21 @@ const ModalContextProvider = ({ children }) => {
     const { totalItems, cart, emptyCart } = useContext(CartContext);
     const [order, setOrder] = useState();
     const [disableModal, setDisableModal] = useState(false);
+    const [modalError, setModalError] = useState();
 
     useEffect(() => {
         setDisableModal(totalItems === 0);
     }, [totalItems]);
+
+    useEffect(() => {
+        const timer = setTimeout(() => {
+            setModalError(null);
+        }, [3000]);
+
+        return () => {
+            clearTimeout(timer);
+        };
+    }, [modalError]);
 
     const handleModalSubmit = (event) => {
         event.preventDefault();
@@ -35,15 +46,30 @@ const ModalContextProvider = ({ children }) => {
             if (formRef.current) {
                 const formData = new FormData(formRef.current);
                 const data = Object.fromEntries(formData.entries());
+                let isValid = true;
+
+                for (let [, value] of formData.entries()) {
+                    if (value.trim() === '') {
+                        isValid = false;
+                        break;
+                    }
+                }
+                if (!isValid) {
+                    setModalError({
+                        message:
+                            'Invalid order. Please fill all required fields.',
+                    });
+                    return;
+                }
 
                 setOrder({
                     customer: data,
                     items: cart,
                 });
+                emptyCart();
+                setModalType('cart');
+                modalRef.current.close();
             }
-            setModalType('cart');
-            emptyCart();
-            modalRef.current.close();
         }
     };
 
@@ -65,6 +91,7 @@ const ModalContextProvider = ({ children }) => {
         disableModal,
         setDisableModal,
         order,
+        modalError,
     };
 
     return (

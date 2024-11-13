@@ -7,6 +7,7 @@ const Input = ({
     type = 'text',
     validationFn,
     validationMsg,
+    ...props
 }) => {
     const [isValid, setIsValid] = useState(true);
     const [value, setValue] = useState('');
@@ -40,6 +41,7 @@ const Input = ({
                 onChange={handleChange}
                 onBlur={handleBlur}
                 value={value}
+                {...props}
             />
             {!isValid && <p className='invalid-text'>{validationMsg}</p>}
         </div>

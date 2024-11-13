@@ -10,6 +10,7 @@ export const CartContext = createContext({
     emptyCart: () => {},
 });
 
+// TODO: Replace state handling with reducers...
 export default function CartContextProvider({ children }) {
     const [cart, setCart] = useState({});
     const [totalItems, setTotalItems] = useState(0);
@@ -53,7 +54,6 @@ export default function CartContextProvider({ children }) {
                 },
             }));
         }
-        console.log('item: ', item);
         setTotalItems((prev) => prev - 1);
         setCartTotal((prev) => prev - parseFloat(item.product.price));
     };
