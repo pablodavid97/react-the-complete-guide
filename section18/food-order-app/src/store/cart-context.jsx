@@ -1,4 +1,4 @@
-import { createContext, useState } from 'react';
+import { createContext, useReducer, useState } from 'react';
 
 export const CartContext = createContext({
     cartItems: [],
@@ -10,56 +10,80 @@ export const CartContext = createContext({
     emptyCart: () => {},
 });
 
-// TODO: Replace state handling with reducers...
+const cartReducer = (state, action) => {
+    if (action.type === 'ADD_ITEM') {
+        const { newProduct } = action.payload;
+        const product = state[newProduct.id];
+
+        if (product) {
+            return {
+                ...state,
+                [newProduct.id]: {
+                    product: newProduct,
+                    qnty: product.qnty + 1,
+                },
+            };
+        } else {
+            return {
+                ...state,
+                [newProduct.id]: { product: newProduct, qnty: 1 },
+            };
+        }
+    }
+
+    if (action.type === 'REMOVE_ITEM') {
+        const { productId } = action.payload;
+        const item = state[productId];
+
+        if (item.qnty === 1) {
+            const { [productId]: _, ...newCart } = state;
+            return newCart;
+        } else {
+            return {
+                ...state,
+                [productId]: {
+                    product: item.product,
+                    qnty: item.qnty - 1,
+                },
+            };
+        }
+    }
+
+    if (action.type === 'EMPTY_CART') {
+        return {};
+    }
+
+    return state;
+};
+
 export default function CartContextProvider({ children }) {
-    const [cart, setCart] = useState({});
+    const [cart, cartDispatch] = useReducer(cartReducer, {});
     const [totalItems, setTotalItems] = useState(0);
     const [cartTotal, setCartTotal] = useState(0);
     const cartItems = Object.entries(cart);
 
     const addItemToCart = (newProduct) => {
-        const product = cart[newProduct.id];
-
-        if (product) {
-            setCart((prev) => ({
-                ...prev,
-                [newProduct.id]: {
-                    product: newProduct,
-                    qnty: product.qnty + 1,
-                },
-            }));
-        } else {
-            setCart((prev) => ({
-                ...prev,
-                [newProduct.id]: { product: newProduct, qnty: 1 },
-            }));
-        }
-
+        cartDispatch({
+            type: 'ADD_ITEM',
+            payload: { newProduct },
+        });
         setTotalItems((prev) => prev + 1);
         setCartTotal((prev) => prev + parseFloat(newProduct.price));
     };
 
-    const removeItemFromCart = (productId) => {
-        const item = cart[productId];
-
-        if (item.qnty === 1) {
-            const { [productId]: _, ...newCart } = cart;
-            setCart(newCart);
-        } else {
-            setCart((prev) => ({
-                ...prev,
-                [productId]: {
-                    product: item.product,
-                    qnty: item.qnty - 1,
-                },
-            }));
-        }
+    const removeItemFromCart = (product) => {
+        cartDispatch({
+            type: 'REMOVE_ITEM',
+            payload: { productId: product.id },
+        });
         setTotalItems((prev) => prev - 1);
-        setCartTotal((prev) => prev - parseFloat(item.product.price));
+        setCartTotal((prev) => prev - parseFloat(product.price));
     };
 
     const emptyCart = () => {
-        setCart({});
+        cartDispatch({
+            type: 'EMPTY_CART',
+        });
         setCartTotal(0);
         setTotalItems(0);
     };

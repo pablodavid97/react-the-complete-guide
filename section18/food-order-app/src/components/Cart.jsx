@@ -20,7 +20,7 @@ const Cart = () => {
                                     <span className='cart-item-actions'>
                                         <button
                                             onClick={() =>
-                                                removeItemFromCart(key)
+                                                removeItemFromCart(item.product)
                                             }
                                         >
                                             -

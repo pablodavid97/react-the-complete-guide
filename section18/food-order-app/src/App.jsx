@@ -21,7 +21,7 @@ function App() {
     } = useFetch(fetchMeals);
 
     const {
-        data: response,
+        success,
         error: submitOrderError,
         isLoading: loadingSubmitOrder,
     } = useFetch(submitOrder, { method: 'POST', data: order });
@@ -51,9 +51,7 @@ function App() {
             </Modal>
             <Header />
             <main className='container'>
-                {response.message && (
-                    <p className='success'>{response.message}</p>
-                )}
+                {success && <p className='success'>{success.message}</p>}
                 {isLoading && <p>Loading data...</p>}
                 {hasError && <p className='error-msg'>{hasError.message}</p>}
                 {!isLoading && <Products products={products} />}

@@ -3,6 +3,7 @@ import { useState, useEffect, useRef } from 'react';
 const useFetch = (fetchFn, options = { method: 'GET', data: {} }) => {
     const [data, setData] = useState([]);
     const [isLoading, setIsLoading] = useState(false);
+    const [success, setSuccess] = useState();
     const [error, setError] = useState();
     const previousOptionsRef = useRef();
 
@@ -19,6 +20,16 @@ const useFetch = (fetchFn, options = { method: 'GET', data: {} }) => {
             clearTimeout(timer);
         };
     }, [error]);
+
+    useEffect(() => {
+        const timer = setTimeout(() => {
+            setSuccess(null);
+        }, [3000]);
+
+        return () => {
+            clearTimeout(timer);
+        };
+    }, [success]);
 
     useEffect(() => {
         if (
@@ -49,6 +60,10 @@ const useFetch = (fetchFn, options = { method: 'GET', data: {} }) => {
                     try {
                         const response = await fetchFn(options.data);
                         setData(response);
+                        setSuccess({
+                            message:
+                                response.message || 'Success updating data.',
+                        });
                     } catch (error) {
                         setError({
                             message:
@@ -64,6 +79,7 @@ const useFetch = (fetchFn, options = { method: 'GET', data: {} }) => {
 
     return {
         data,
+        success,
         error,
         isLoading,
     };
