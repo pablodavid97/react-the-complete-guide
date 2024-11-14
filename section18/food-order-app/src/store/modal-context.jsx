@@ -75,6 +75,7 @@ const ModalContextProvider = ({ children }) => {
 
     const handleModalClose = () => {
         setModalType('cart');
+        modalRef.current.close();
     };
 
     const openModal = () => {

@@ -23,7 +23,7 @@ const Modal = forwardRef(function Modal(
     });
 
     return createPortal(
-        <dialog className='modal' ref={dialog}>
+        <dialog className='modal' ref={dialog} onClose={handleModalClose}>
             {hasError && <p className='error-msg'>{hasError.message}</p>}
             {children}
             <form method='dialog' className='modal-actions'>
