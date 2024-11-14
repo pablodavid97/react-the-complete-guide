@@ -4,11 +4,7 @@ const Products = ({ products }) => {
     return (
         <ul id='meals'>
             {products.map((product) => {
-                return (
-                    <li className='meal-item' key={product.id}>
-                        <Product product={product} />
-                    </li>
-                );
+                return <Product key={product.id} product={product} />;
             })}
         </ul>
     );

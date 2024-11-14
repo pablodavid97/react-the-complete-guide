@@ -1,8 +1,8 @@
 import { useContext } from 'react';
 
-import img from '../assets/logo.jpg';
-import { CartContext } from '../store/cart-context';
-import { ModalContext } from '../store/modal-context';
+import img from '../../assets/logo.jpg';
+import { CartContext } from '../../store/cart-context';
+import { ModalContext } from '../../store/modal-context';
 import Button from './Button';
 
 const Header = () => {

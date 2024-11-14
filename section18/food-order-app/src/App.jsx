@@ -1,10 +1,10 @@
 import { useContext, useEffect, useState } from 'react';
 
-import Header from './components/Header';
-import Products from './components/Products';
-import Modal from './components/Modal';
-import Cart from './components/Cart';
-import CheckoutForm from './components/CheckoutForm';
+import Header from './components/UI/Header';
+import Products from './components/Products/Products';
+import Modal from './components/UI/Modal';
+import Cart from './components/Cart/Cart';
+import CheckoutForm from './components/UI/CheckoutForm';
 import { ModalContext } from './store/modal-context';
 import useFetch from './hooks/useFetch';
 

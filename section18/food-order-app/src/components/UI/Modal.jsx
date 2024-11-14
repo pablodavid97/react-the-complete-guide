@@ -1,6 +1,6 @@
 import { forwardRef, useImperativeHandle, useRef, useContext } from 'react';
 import { createPortal } from 'react-dom';
-import { ModalContext } from '../store/modal-context';
+import { ModalContext } from '../../store/modal-context';
 import Button from './Button';
 
 const Modal = forwardRef(function Modal(

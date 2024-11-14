@@ -1,8 +1,8 @@
-import { forwardRef, useContext, useEffect } from 'react';
+import { forwardRef, useContext } from 'react';
 import Input from './Input';
-import { isValidEmail } from '../util';
-import { CartContext } from '../store/cart-context';
-import { ModalContext } from '../store/modal-context';
+import { isValidEmail } from '../../util';
+import { CartContext } from '../../store/cart-context';
+import { ModalContext } from '../../store/modal-context';
 
 const CheckoutForm = forwardRef(function CheckoutForm(_, ref) {
     const { cartTotal } = useContext(CartContext);
