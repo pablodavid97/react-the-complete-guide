@@ -1,5 +1,6 @@
 import { useContext } from 'react';
 import { CartContext } from '../store/cart-context';
+import Button from './Button';
 
 const Product = ({ product }) => {
     const { addItemToCart } = useContext(CartContext);
@@ -13,12 +14,12 @@ const Product = ({ product }) => {
             <h3>{product.name}</h3>
             <span className='meal-item-price'>${product.price}</span>
             <p className='meal-item-description'>{product.description}</p>
-            <button
-                className='meal-item-actions button'
+            <Button
+                className='meal-item-actions'
                 onClick={() => addItemToCart(product)}
             >
                 Add to Cart
-            </button>
+            </Button>
         </article>
     );
 };

@@ -1,5 +1,6 @@
 import { useContext } from 'react';
 import { CartContext } from '../store/cart-context';
+import Button from './Button';
 
 const Cart = () => {
     const { cartItems, cartTotal, addItemToCart, removeItemFromCart } =
@@ -18,21 +19,21 @@ const Cart = () => {
                                     {item.product.name} - {item.qnty} x $
                                     {item.product.price}
                                     <span className='cart-item-actions'>
-                                        <button
+                                        <Button
                                             onClick={() =>
                                                 removeItemFromCart(item.product)
                                             }
                                         >
                                             -
-                                        </button>
+                                        </Button>
                                         {item.qnty}
-                                        <button
+                                        <Button
                                             onClick={() =>
                                                 addItemToCart(item.product)
                                             }
                                         >
                                             +
-                                        </button>
+                                        </Button>
                                     </span>
                                 </li>
                             );

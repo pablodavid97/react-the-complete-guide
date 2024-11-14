@@ -1,6 +1,7 @@
 import { forwardRef, useImperativeHandle, useRef, useContext } from 'react';
 import { createPortal } from 'react-dom';
 import { ModalContext } from '../store/modal-context';
+import Button from './Button';
 
 const Modal = forwardRef(function Modal(
     { children, submitBtnText, hasError },
@@ -26,17 +27,16 @@ const Modal = forwardRef(function Modal(
             {hasError && <p className='error-msg'>{hasError.message}</p>}
             {children}
             <form method='dialog' className='modal-actions'>
-                <button className='text-button' onClick={handleModalClose}>
+                <Button textOnly={true} onClick={handleModalClose}>
                     Close
-                </button>
-                <button
-                    type='button'
-                    onClick={handleModalSubmit}
-                    className={`button ${disableModal ? 'disabled' : ''}`}
+                </Button>
+                <Button
+                    className={`${disableModal ? 'disabled' : ''}`}
                     disabled={disableModal}
+                    onClick={handleModalSubmit}
                 >
                     {submitBtnText}
-                </button>
+                </Button>
             </form>
         </dialog>,
         document.getElementById('modal')

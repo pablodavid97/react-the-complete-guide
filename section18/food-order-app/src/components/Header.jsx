@@ -3,6 +3,7 @@ import { useContext } from 'react';
 import img from '../assets/logo.jpg';
 import { CartContext } from '../store/cart-context';
 import { ModalContext } from '../store/modal-context';
+import Button from './Button';
 
 const Header = () => {
     const { totalItems } = useContext(CartContext);
@@ -14,9 +15,9 @@ const Header = () => {
                 <img src={img} alt='Dinner plate with view of city.' />
                 REACTFOOD
             </div>
-            <button onClick={openModal} className='text-button'>
+            <Button textOnly={true} onClick={openModal}>
                 Cart ({totalItems})
-            </button>
+            </Button>
         </header>
     );
 };
