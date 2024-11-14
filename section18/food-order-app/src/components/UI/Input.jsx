@@ -31,7 +31,7 @@ const Input = ({
     return (
         <div className='control'>
             <label htmlFor={id} className={`${!isValid ? 'invalid-text' : ''}`}>
-                {label}
+                {label} {props.required && '(required)'}
             </label>
             <input
                 id={id}
