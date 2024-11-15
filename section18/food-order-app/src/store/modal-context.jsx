@@ -17,10 +17,10 @@ const ModalContextProvider = ({ children }) => {
     const modalRef = useRef();
     const formRef = useRef();
     const [modalType, setModalType] = useState('cart');
-    const { totalItems, cart, emptyCart } = useContext(CartContext);
-    const [order, setOrder] = useState();
     const [disableModal, setDisableModal] = useState(false);
     const [modalError, setModalError] = useState();
+    const [order, setOrder] = useState();
+    const { totalItems, cart, emptyCart } = useContext(CartContext);
 
     useEffect(() => {
         setDisableModal(totalItems === 0);
@@ -29,7 +29,7 @@ const ModalContextProvider = ({ children }) => {
     useEffect(() => {
         const timer = setTimeout(() => {
             setModalError(null);
-        }, [3000]);
+        }, 3000);
 
         return () => {
             clearTimeout(timer);
@@ -91,8 +91,8 @@ const ModalContextProvider = ({ children }) => {
         modalType,
         disableModal,
         setDisableModal,
-        order,
         modalError,
+        order,
     };
 
     return (

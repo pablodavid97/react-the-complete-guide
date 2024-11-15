@@ -1,7 +1,9 @@
 import { forwardRef, useImperativeHandle, useRef, useContext } from 'react';
 import { createPortal } from 'react-dom';
-import { ModalContext } from '../../store/modal-context';
 import Button from './Button';
+import Snackbar from './Snackbar';
+
+import { ModalContext } from '../../store/modal-context';
 
 const Modal = forwardRef(function Modal(
     { children, submitBtnText, hasError },
@@ -24,7 +26,7 @@ const Modal = forwardRef(function Modal(
 
     return createPortal(
         <dialog className='modal' ref={dialog} onClose={handleModalClose}>
-            {hasError && <p className='error-msg'>{hasError.message}</p>}
+            {hasError && <Snackbar message={hasError.message} type='error' />}
             {children}
             <form method='dialog' className='modal-actions'>
                 <Button textOnly={true} onClick={handleModalClose}>

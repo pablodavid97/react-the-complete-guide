@@ -15,17 +15,14 @@ const useFetch = (fetchFn, options = { method: 'GET', data: {} }) => {
         const timer = setTimeout(() => {
             setError(null);
         }, [3000]);
-
         return () => {
             clearTimeout(timer);
         };
     }, [error]);
-
     useEffect(() => {
         const timer = setTimeout(() => {
             setSuccess(null);
         }, [3000]);
-
         return () => {
             clearTimeout(timer);
         };

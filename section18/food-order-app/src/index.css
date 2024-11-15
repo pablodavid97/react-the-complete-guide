@@ -280,9 +280,8 @@ h1 {
   color: red;
 }
 
-.error-msg {
+.snackbar {
   color: white;
-  background-color: red;
   padding: 1rem;
   font-weight: 500;
   font-size: 1.2rem;
@@ -292,12 +291,10 @@ h1 {
   text-align: center;
 }
 
-.success {
-  width: 30vw;
-  text-align: center;
-  margin: 0 auto;
-  padding: 1rem;
+.snackbar.error {
+  background-color: red;
+}
+
+.snackbar.success {
   background: green;
-  border-radius: 10px;
-  font-size: 1.2rem;
 }
