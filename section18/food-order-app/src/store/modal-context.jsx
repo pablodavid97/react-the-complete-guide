@@ -26,16 +26,6 @@ const ModalContextProvider = ({ children }) => {
         setDisableModal(totalItems === 0);
     }, [totalItems]);
 
-    useEffect(() => {
-        const timer = setTimeout(() => {
-            setModalError(null);
-        }, 3000);
-
-        return () => {
-            clearTimeout(timer);
-        };
-    }, [modalError]);
-
     const handleModalSubmit = (event) => {
         event.preventDefault();
         if (modalType === 'cart') {

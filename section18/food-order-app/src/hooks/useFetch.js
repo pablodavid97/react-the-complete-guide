@@ -1,7 +1,11 @@
-import { useState, useEffect, useRef } from 'react';
+import { useState, useEffect, useRef, useCallback } from 'react';
 
-const useFetch = (fetchFn, options = { method: 'GET', data: {} }) => {
-    const [data, setData] = useState([]);
+const useFetch = (
+    fetchFn,
+    options = { method: 'GET', data: {} },
+    initialData = []
+) => {
+    const [data, setData] = useState(initialData);
     const [isLoading, setIsLoading] = useState(false);
     const [success, setSuccess] = useState();
     const [error, setError] = useState();
@@ -14,19 +18,53 @@ const useFetch = (fetchFn, options = { method: 'GET', data: {} }) => {
     useEffect(() => {
         const timer = setTimeout(() => {
             setError(null);
-        }, [3000]);
+        }, 3000);
+
         return () => {
             clearTimeout(timer);
         };
     }, [error]);
+
     useEffect(() => {
         const timer = setTimeout(() => {
             setSuccess(null);
-        }, [3000]);
+        }, 3000);
+
         return () => {
             clearTimeout(timer);
         };
     }, [success]);
+
+    const fetchData = useCallback(async () => {
+        setIsLoading(true);
+        try {
+            const response = await fetchFn();
+            setData(response);
+        } catch (error) {
+            setError({
+                message: error.message || 'Error when fetching data.',
+            });
+        }
+        setIsLoading(false);
+    }, []);
+
+    const sendRequest = useCallback(async (requestData) => {
+        if (!requestData) return;
+
+        setIsLoading(true);
+        try {
+            const response = await fetchFn(requestData);
+            setData(response);
+            setSuccess({
+                message: response.message || 'Success updating data.',
+            });
+        } catch (error) {
+            setError({
+                message: error.message || 'Error when fetching data.',
+            });
+        }
+        setIsLoading(false);
+    }, []);
 
     useEffect(() => {
         if (
@@ -35,44 +73,18 @@ const useFetch = (fetchFn, options = { method: 'GET', data: {} }) => {
         ) {
             previousOptionsRef.current = options;
 
-            const fetchData = async () => {
+            const fetchFn = async () => {
                 if (options.method === 'GET') {
-                    setIsLoading(true);
-                    try {
-                        const response = await fetchFn();
-                        setData(response);
-                    } catch (error) {
-                        setError({
-                            message:
-                                error.message || 'Error when fetching data.',
-                        });
-                    }
-                    setIsLoading(false);
+                    await fetchData();
                 }
 
                 if (options.method === 'POST') {
-                    if (!options.data) return;
-
-                    setIsLoading(true);
-                    try {
-                        const response = await fetchFn(options.data);
-                        setData(response);
-                        setSuccess({
-                            message:
-                                response.message || 'Success updating data.',
-                        });
-                    } catch (error) {
-                        setError({
-                            message:
-                                error.message || 'Error when fetching data.',
-                        });
-                    }
-                    setIsLoading(false);
+                    await sendRequest(options.data);
                 }
             };
-            fetchData();
+            fetchFn();
         }
-    }, [fetchFn, options]);
+    }, [fetchFn, options, fetchData, sendRequest]);
 
     return {
         data,
