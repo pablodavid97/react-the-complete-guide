@@ -1,30 +1,30 @@
 import { NavLink } from 'react-router-dom';
-import styles from './Nav.module.css';
+import classes from './EventsNavigation.module.css';
 
-function Nav() {
+function EventsNavigation() {
     return (
-        <header className={styles.header}>
+        <header className={classes.header}>
             <nav>
-                <ul className={styles.list}>
+                <ul className={classes.list}>
                     <li>
                         <NavLink
-                            to='/'
+                            to='/events'
                             className={({ isActive }) =>
-                                isActive ? styles.active : undefined
+                                isActive ? classes.active : undefined
                             }
                             end
                         >
-                            Home
+                            All Events
                         </NavLink>
                     </li>
                     <li>
                         <NavLink
-                            to='products'
+                            to='/events/new'
                             className={({ isActive }) =>
-                                isActive ? styles.active : undefined
+                                isActive ? classes.active : undefined
                             }
                         >
-                            Products
+                            New Event
                         </NavLink>
                     </li>
                 </ul>
@@ -33,4 +33,4 @@ function Nav() {
     );
 }
 
-export default Nav;
+export default EventsNavigation;

@@ -3,23 +3,29 @@
     margin: auto;
     padding: 2rem;
     display: flex;
-    justify-content: center;
-    background-color: rgb(42, 116, 125);
-    border-radius: 8px;
+    justify-content: space-between;
+    gap: 3rem;
+    background-color: blue;
+    border-radius: 5px;
 }
 
 .list {
     display: flex;
     gap: 1rem;
+    list-style-type: none;
 }
 
 .list a {
     text-decoration: none;
     color: var(--color-primary-400);
+    margin: 0 3rem;
 }
 
 .list a:hover,
 .list a.active {
-    color: var(--color-primary-800);
-    text-decoration: underline;
+    color: red;
+}
+
+.header form {
+    padding-top: 0.7rem;
 }
