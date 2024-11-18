@@ -1,0 +1,12 @@
+{
+    "name": "redux-app",
+    "private": true,
+    "version": "0.0.0",
+    "main": "redux-demo.js",
+    "scripts": {
+        "dev": "node redux-demo.js"
+    },
+    "dependencies": {
+        "redux": "^5.0.1"
+    }
+}
