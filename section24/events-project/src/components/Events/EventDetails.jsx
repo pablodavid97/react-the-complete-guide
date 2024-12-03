@@ -1,3 +1,4 @@
+import { useState } from 'react';
 import { Link, Outlet, useParams, useNavigate } from 'react-router-dom';
 import { useQuery } from '@tanstack/react-query';
 import { fetchEvent } from '../../util/http.js';
@@ -7,8 +8,11 @@ import { queryClient } from '../../util/http.js';
 
 import Header from '../Header.jsx';
 import ErrorBlock from '../UI/ErrorBlock.jsx';
+import Modal from '../UI/Modal.jsx';
 
 export default function EventDetails() {
+    const [isDeleting, setIsDeleting] = useState(false);
+
     const { id } = useParams();
     const navigate = useNavigate();
     const {
@@ -17,23 +21,32 @@ export default function EventDetails() {
         isError: errorFetching,
         error,
     } = useQuery({
-        queryKey: ['event', { id }],
+        queryKey: ['events', { id }],
         queryFn: ({ signal }) => fetchEvent({ id, signal }),
     });
 
     const {
         mutate,
-        isPending: isDeleting,
-        isError: isDeleteError,
+        isPending: pendingDeletion,
+        isError: errorDeleting,
     } = useMutation({
         mutationFn: deleteEvent,
         onSuccess: () => {
             queryClient.invalidateQueries({
                 queryKey: ['events'],
+                refetchType: 'none',
             });
             navigate('/events');
         },
     });
+
+    const handleStartDelete = () => {
+        setIsDeleting(true);
+    };
+
+    const handleStopDelete = () => {
+        setIsDeleting(false);
+    };
 
     const handleDeleteEvent = () => {
         mutate({ id });
@@ -44,19 +57,9 @@ export default function EventDetails() {
 
     if (isLoading) {
         loadingContent = (
-            <section className='content-section'>
+            <section id='event-details-content' className='content-section'>
                 <p style={{ textAlign: 'center' }}>
                     Loading data please wait...
-                </p>
-            </section>
-        );
-    }
-
-    if (isDeleting) {
-        loadingContent = (
-            <section className='content-section'>
-                <p style={{ textAlign: 'center' }}>
-                    Deleting event please wait...
                 </p>
             </section>
         );
@@ -73,17 +76,45 @@ export default function EventDetails() {
         );
     }
 
-    if (isDeleteError) {
-        errorContent = (
-            <ErrorBlock
-                title='An error occurred!'
-                message='Unable to delete event at the moment, please try again later!'
-            />
-        );
-    }
-
     return (
         <>
+            {isDeleting && (
+                <Modal onClose={handleStopDelete}>
+                    <h2>Are you sure?</h2>
+                    <p>
+                        Do you really want to delete this event? This action
+                        cannot be undone.
+                    </p>
+                    <div className='form-actions'>
+                        {pendingDeletion && <p>Deleting, please wait...</p>}
+                        {!pendingDeletion && (
+                            <>
+                                <button
+                                    onClick={handleStopDelete}
+                                    className='button-text'
+                                >
+                                    Cancel
+                                </button>
+                                <button
+                                    onClick={handleDeleteEvent}
+                                    className='button'
+                                >
+                                    Delete
+                                </button>
+                            </>
+                        )}
+                    </div>
+                    {errorDeleting && (
+                        <ErrorBlock
+                            title='Failed to delete event'
+                            message={
+                                errorDeleting.info?.message ||
+                                'Failed to delete event, please try again later.'
+                            }
+                        />
+                    )}
+                </Modal>
+            )}
             <Outlet />
             <Header>
                 <Link to='/events' className='nav-item'>
@@ -97,7 +128,7 @@ export default function EventDetails() {
                     <header>
                         <h1>{event.title}</h1>
                         <nav>
-                            <button onClick={handleDeleteEvent}>Delete</button>
+                            <button onClick={handleStartDelete}>Delete</button>
                             <Link to='edit'>Edit</Link>
                         </nav>
                     </header>
