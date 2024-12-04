@@ -1,5 +1,6 @@
 * {
   box-sizing: border-box;
+  margin: 0;
 }
 
 html {
@@ -12,25 +13,10 @@ body {
   color: white;
 }
 
-#main-header {
-  max-width: 40rem;
-  margin: 2rem auto 4rem auto;
-  display: flex;
-  align-items: center;
-  gap: 2rem;
-  color: #c1d9fa;
-}
-
-#main-header img {
-  width: 5rem;
-  height: 5rem;
-  object-fit: contain;
-  border-radius: 50%;
-}
-
-#main-header h1,
-#main-header p {
-  margin: 0;
+.header {
+  background: #9a1919;
+  padding: 2rem 3rem;
+  text-align: center;
 }
 
 main {

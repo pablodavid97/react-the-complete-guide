@@ -1,11 +1,9 @@
 .header {
-    max-width: 60rem;
-    margin: auto;
     padding: 2rem;
     display: flex;
     justify-content: space-between;
     gap: 3rem;
-    background-color: blue;
+    background-color: #1f5fa4;
     border-radius: 5px;
 }
 
@@ -23,7 +21,7 @@
 
 .list a:hover,
 .list a.active {
-    color: red;
+    text-decoration: underline;
 }
 
 .header form {
