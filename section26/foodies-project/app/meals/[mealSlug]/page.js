@@ -14,13 +14,14 @@ const MealPage = ({ params }) => {
 
     meal.instructions = meal.instructions.replace(/\n/g, '<br />');
 
-    console.log('meal: ', meal);
-
     return (
         <>
             <header className={styles.header}>
                 <div className={styles.image}>
-                    <Image src={meal.image} fill />
+                    <Image
+                        src={`https://pllanes-nextjs-demo-foodies-app.s3.us-east-1.amazonaws.com/burger.jpg/${meal.image}`}
+                        fill
+                    />
                 </div>
                 <div className={styles.headerText}>
                     <h1>{meal.title}</h1>
