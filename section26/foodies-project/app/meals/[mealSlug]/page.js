@@ -4,6 +4,20 @@ import styles from './page.module.css';
 import { getMeal } from '@/lib/meals';
 import { notFound } from 'next/navigation';
 
+export const generateMetadata = async ({ params }) => {
+    const { mealSlug } = params;
+    const meal = getMeal(mealSlug);
+
+    if (!meal) {
+        notFound();
+    }
+
+    return {
+        title: meal.title,
+        description: meal.summary,
+    };
+};
+
 const MealPage = ({ params }) => {
     const { mealSlug } = params;
     const meal = getMeal(mealSlug);
@@ -19,7 +33,7 @@ const MealPage = ({ params }) => {
             <header className={styles.header}>
                 <div className={styles.image}>
                     <Image
-                        src={`https://pllanes-nextjs-demo-foodies-app.s3.us-east-1.amazonaws.com/burger.jpg/${meal.image}`}
+                        src={`https://pllanes-nextjs-demo-foodies-app.s3.us-east-1.amazonaws.com/${meal.image}`}
                         fill
                     />
                 </div>
